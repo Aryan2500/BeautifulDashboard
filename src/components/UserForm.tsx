@@ -1,10 +1,11 @@
 // UserForm.jsx
-import React, { useRef } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useRef } from 'react';
+import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik';
 import * as Yup from 'yup';
 import Select from 'react-select';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
 
 const countryOptions = [
     { value: 'USA', label: 'USA' },
@@ -13,7 +14,10 @@ const countryOptions = [
 ];
 
 const UserForm = () => {
-    const editorRef = useRef();
+
+    const quillRef = useRef<ReactQuill | null>(null);
+
+
 
     const validationSchema = Yup.object({
         username: Yup.string()
@@ -32,10 +36,13 @@ const UserForm = () => {
             .required('Required'),
         bio: Yup.string()
             .required('Required')
-            .test('test-bio', 'Bio is required', value => {
-                return editorRef.current && editorRef.current.getEditor().getText().trim().length > 0;
+            .test('test-bio', 'Bio is required', (value) => {
+                console.log(value);
+                return quillRef.current && quillRef.current.getEditor().getText().trim().length > 0;
             }),
     });
+
+
 
     return (
         <Formik
@@ -112,7 +119,7 @@ const UserForm = () => {
                             name="country"
                             options={countryOptions}
                             className="mt-1"
-                            onChange={(option) => setFieldValue('country', option.value)}
+                            onChange={(option) => setFieldValue('country', option!.value)}
                         />
                         <ErrorMessage name="country" component="div" className="text-red-500" />
                     </div>
@@ -120,13 +127,13 @@ const UserForm = () => {
                     <div>
                         <label htmlFor="bio" className="block text-neutral-200">Bio</label>
                         <Field name="bio">
-                            {({ field }) =>
+                            {({ field }: FieldProps) =>
                                 <ReactQuill
                                     id="bio"
                                     value={field.value}
                                     onChange={field.onChange(field.name)}
-                                    ref={editorRef}
-                                    name="bio"
+                                    ref={quillRef}
+
                                     className="bg-neutral-700 border border-neutral-600 rounded text-neutral-200"
                                     theme="snow"
                                     modules={{
@@ -162,5 +169,6 @@ const UserForm = () => {
         </Formik>
     );
 };
+
 
 export default UserForm;

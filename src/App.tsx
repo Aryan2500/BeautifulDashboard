@@ -10,10 +10,20 @@ import okToast from "./service/okToast";
 import errToast from "./service/errToast";
 import Modal from "./components/Modal";
 import UserForm from "./components/UserForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Loader from "./components/Loader";
 
 const App = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => setLoading(true);
+  }, []);
+
   const handleDelete = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -46,68 +56,77 @@ const App = () => {
     { label: 'Subcategory', href: '#' },
     { label: 'Current Page' }
   ];
-  return (
-    <div className="flex flex-col h-screen">
-      <main className="w-full h-screen flex flex-row">
-        <Navigation />
-        {/*  <div className=" h-screen flex flex-col"> */}
-        <section className="flex flex-col mt-5 mx-5 w-full gap-5">
-          <TopBar title={'Dashboard'} />
-          <Breadcrumb items={breadcrumbItems} />
+  if (loading) {
+    return <Loader />;
+  }
+  return (<>
+    {loading ? <Loader /> :
+      <div className="flex flex-col h-screen">
+        <main className="w-full h-screen flex flex-row">
+          <Navigation />
+          {/*  <div className=" h-screen flex flex-col"> */}
+          <section className="flex flex-col mt-5 mx-5 w-full gap-5">
+            <TopBar title={'Dashboard'} />
+            <Breadcrumb items={breadcrumbItems} />
 
-          <div className="h-full overflow-y-auto hide-scrollbar">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
-                <UsersIcon className="h-10 w-10 text-neutral-200 mb-2" />
-                <h2 className="text-lg font-semibold text-neutral-200 mb-2">Total Users</h2>
-                <p className="text-3xl font-bold text-neutral-200">1000</p>
+            <div className="h-full overflow-y-auto hide-scrollbar">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
+                  <UsersIcon className="h-10 w-10 text-neutral-200 mb-2" />
+                  <h2 className="text-lg font-semibold text-neutral-200 mb-2">Total Users</h2>
+                  <p className="text-3xl font-bold text-neutral-200">1000</p>
+                </div>
+                <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
+                  <ShoppingCartIcon className="h-10 w-10 text-neutral-200 mb-2" />
+                  <h2 className="text-lg font-semibold text-neutral-200 mb-2">Total Orders</h2>
+                  <p className="text-3xl font-bold text-neutral-200">500</p>
+                </div>
+                <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
+                  <CurrencyDollarIcon className="h-10 w-10 text-neutral-200 mb-2" />
+                  <h2 className="text-lg font-semibold text-neutral-200 mb-2">Total Revenue</h2>
+                  <p className="text-3xl font-bold text-neutral-200">$50,000</p>
+                </div>
+                <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
+                  <ScaleIcon className="h-10 w-10 text-neutral-200 mb-2" />
+                  <h2 className="text-lg font-semibold text-neutral-200 mb-2">Average Order Value</h2>
+                  <p className="text-3xl font-bold text-neutral-200">$100</p>
+                </div>
               </div>
-              <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
-                <ShoppingCartIcon className="h-10 w-10 text-neutral-200 mb-2" />
-                <h2 className="text-lg font-semibold text-neutral-200 mb-2">Total Orders</h2>
-                <p className="text-3xl font-bold text-neutral-200">500</p>
-              </div>
-              <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
-                <CurrencyDollarIcon className="h-10 w-10 text-neutral-200 mb-2" />
-                <h2 className="text-lg font-semibold text-neutral-200 mb-2">Total Revenue</h2>
-                <p className="text-3xl font-bold text-neutral-200">$50,000</p>
-              </div>
-              <div className="bg-neutral-800/20 border border-neutral-500/50 rounded p-6 flex flex-col justify-center items-center shadow-lg">
-                <ScaleIcon className="h-10 w-10 text-neutral-200 mb-2" />
-                <h2 className="text-lg font-semibold text-neutral-200 mb-2">Average Order Value</h2>
-                <p className="text-3xl font-bold text-neutral-200">$100</p>
-              </div>
+
+              <NotificationBar notification={notification} />
+
+            </div>
+            <div>
+              <button onClick={handleDelete} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                Sweet Alert Test
+              </button>
+              <button
+                onClick={() => setModalOpen(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Open Modal
+              </button>
             </div>
 
-            <NotificationBar notification={notification} />
+            <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+              <UserForm />
+            </Modal>
+            <Footer />
 
-          </div>
-          <div>
-            <button onClick={handleDelete} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-              Sweet Alert Test
-            </button>
-            <button
-              onClick={() => setModalOpen(true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            >
-              Open Modal
-            </button>
-          </div>
+          </section>
 
-          <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-            <UserForm />
-          </Modal>
-          <Footer />
+          {/* </div> */}
 
-        </section>
+        </main >
+        <ToastContainer />
+      </div >
+    }
+  </>)
 
-        {/* </div> */}
 
-      </main >
-      <ToastContainer />
-    </div >
 
-  )
+
+
 }
 
 export default App

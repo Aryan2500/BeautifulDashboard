@@ -1,3 +1,4 @@
+'use client'
 import { motion, useAnimationControls, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import NavigationLink from "./NavigationLink"
@@ -56,7 +57,12 @@ const Navigation = () => {
     }
   }, [isOpen])
 
-  const handleOpenClose = () => {
+  const handleOpenClose = (event) => {
+    if (isOpen && event.type == 'pointerenter') {
+    console.log(event.type)
+
+      return
+    }
     setIsOpen(!isOpen)
     setSelectedProject(null)
   }
@@ -64,6 +70,7 @@ const Navigation = () => {
   return (
     <>
       <motion.nav
+        onHoverStart={handleOpenClose}
         variants={containerVariants}
         animate={containerControls}
         initial="close"
@@ -84,7 +91,7 @@ const Navigation = () => {
             : ''}
           <button
             className="p-1 rounded-full flex"
-            onClick={() => handleOpenClose()}
+            onClick={(e) => handleOpenClose(e)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
