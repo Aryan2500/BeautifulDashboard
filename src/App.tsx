@@ -12,6 +12,7 @@ import Modal from "./components/Modal";
 import UserForm from "./components/UserForm";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
+import Topbar2 from "./components/Topbar2";
 
 const App = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -66,7 +67,9 @@ const App = () => {
           <Navigation />
           {/*  <div className=" h-screen flex flex-col"> */}
           <section className="flex flex-col mt-5 mx-5 w-full gap-5">
-            <TopBar title={'Dashboard'} />
+            {/* <TopBar title={'Dashboard'} />
+             */}
+             <Topbar2 title={'Dashboard'} />
             <Breadcrumb items={breadcrumbItems} />
 
             <div className="h-full overflow-y-auto hide-scrollbar">
