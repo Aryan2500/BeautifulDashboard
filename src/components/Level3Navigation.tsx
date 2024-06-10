@@ -10,7 +10,7 @@ import {
 import { motion } from "framer-motion"
 import NavigationLink from "./NavigationLink"
 import { NavContext } from "./Navigation"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useRef } from "react"
 
 
 const variants = {
@@ -36,15 +36,27 @@ const Level3Navigation = ({
   setSelectedProject,
 }: Props) => {
 
-  const isNavOpen = useContext(NavContext);
 
-  console.log(isNavOpen)
+  const navRef = useRef();
+  const handleClickOutside = (event: Event) => {
+    console.log(navRef.current)
+    console.log(event.target)
+
+    if (navRef.current && !navRef.current.contains(event.target)) {
+      setSelectedProject(null)
+    }
+  };
+
   useEffect(() => {
-
-  }, [isNavOpen])
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
 
   return (
     <motion.nav
+      ref={navRef}
       variants={variants}
       initial="close"
       animate="open"
