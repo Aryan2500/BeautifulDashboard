@@ -28,3 +28,6 @@ body {
 .animate-blink {
   animation: blink 1s infinite;
 }
+.l3nav{
+  left: 512px;
+}

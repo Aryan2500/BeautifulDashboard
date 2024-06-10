@@ -6,7 +6,7 @@ interface Props {
   setSelectedProject: (val: string | null) => void
 }
 
-const ProjectLink = ({ children, name, setSelectedProject }: Props) => {
+const Level3Link = ({ children, name, setSelectedProject }: Props) => {
   const handleClick = () => {
     setSelectedProject(null)
     setTimeout(() => {
@@ -32,4 +32,4 @@ const ProjectLink = ({ children, name, setSelectedProject }: Props) => {
   )
 }
 
-export default ProjectLink
+export default Level3Link
